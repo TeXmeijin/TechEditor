@@ -1,7 +1,19 @@
+import styled from "styled-components";
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
+const Content = styled.div`
+  flex: 1;
+`;
+
 function Layout({ children }) {
   return (
-    <main>
-      {children}
+    <Main>
+      <Content>{children}</Content>
       <footer>
         <a href="https://meijin.me" target="_blank" rel="noopener noreferrer">
           Powered by Meijin
@@ -40,7 +52,7 @@ function Layout({ children }) {
           box-sizing: border-box;
         }
       `}</style>
-    </main>
+    </Main>
   );
 }
 

@@ -1,0 +1,13 @@
+.rc-md-editor .editor-container {
+  flex-wrap: wrap;
+}
+
+.rc-md-editor .editor-container .sec-md,
+.rc-md-editor .editor-container .sec-html {
+  flex: 1;
+  min-width: 100%;
+}
+
+.rc-md-editor .editor-container .sec-html {
+    background: #fcf5e7;
+}
