@@ -11,3 +11,7 @@
 .rc-md-editor .editor-container .sec-html {
     background: #fcf5e7;
 }
+
+.markdown-preview img {
+    max-width: 240px;
+}
