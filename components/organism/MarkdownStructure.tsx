@@ -51,10 +51,7 @@ const parseStructureElement = (element: ReactElement) => {
     currentType: string,
     targetType: string
   ) => {
-    if (
-      !checkValidElementType(currentType) &&
-      !checkValidElementType(targetType)
-    ) {
+    if (!checkValidElementType({ target: currentType })) {
       return false;
     }
     switch (currentType) {
@@ -90,7 +87,7 @@ const parseStructureElement = (element: ReactElement) => {
                */
               for (
                 let currentIndex = index + 1;
-                currentIndex < element.props.children.length;
+                currentIndex <= element.props.children.length;
                 currentIndex++
               ) {
                 const nextElement = element.props.children[currentIndex];
@@ -102,18 +99,22 @@ const parseStructureElement = (element: ReactElement) => {
                   ) {
                     continue;
                   }
-                  if (
-                    checkValidElementType(child.type) &&
-                    checkElementIsCountReset(
-                      child.type.target,
-                      nextElement.type.target
-                    )
-                  ) {
-                    payload.isLast = true;
-                    break;
+                  if (checkValidElementType(child.type)) {
+                    if (
+                      checkElementIsCountReset(
+                        child.type.target,
+                        nextElement.type.target
+                      )
+                    ) {
+                      payload.isLast = true;
+                      break;
+                    }
+                    if (checkValidElementType(nextElement.type)) {
+                      break;
+                    }
+                    continue;
                   }
-                  payload.isLast = false;
-                  break;
+                  continue;
                 }
                 continue;
               }
