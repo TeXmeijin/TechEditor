@@ -78,7 +78,8 @@ summary,
 time,
 mark,
 audio,
-video {
+video,
+p {
     margin: 0;
     padding: 0;
     border: 0;
@@ -164,8 +165,8 @@ table {
 
 p {
     word-break: break-all;
-    line-height: 1.8;
     letter-spacing: 0.2px;
+    margin: 0;
 
     img {
         max-width: 100%;
