@@ -164,6 +164,8 @@ const BaseHeading = styled.h1`
   margin-top: 16px;
   margin-bottom: 16px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
 `;
 
 const BASE_PADDING_LEFT = 24;
@@ -187,9 +189,9 @@ const BaseParagraph = styled.p`
 const Paragraph = styled(BaseParagraph)`
   padding-top: 4px;
   padding-bottom: 4px;
-  white-space: nowrap;
+  /* white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
   max-width: 100%;
 `;
 const Hr = styled.hr`
