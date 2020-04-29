@@ -9,7 +9,7 @@ const WriteContainer = styled.div`
   height: 100%;
 `;
 const WriteContainerItem = styled.div`
-  flex: 1;
+  width: 50%;
 `;
 const Content = styled.div`
   height: 100%;
@@ -31,6 +31,10 @@ const ElementLabel = styled.span`
   text-align: center;
 `;
 
+const RemarkedImg = styled.img`
+  max-width: 100%;
+`;
+
 const isReactElement = (child: any): child is ReactElement => {
   if (child.props) {
     return true;
@@ -38,14 +42,48 @@ const isReactElement = (child: any): child is ReactElement => {
   return false;
 };
 const parseStructureElement = (element: ReactElement) => {
-  const structureName = ["導入", "本論", "展開"];
+  const getStructureName = (index: number) => {
+    if (index === 0) {
+      return "導入";
+    }
+    return "本論";
+  };
   const elementCounter = {
     h1: 0,
     h2: 0,
     h3: 0,
-    p: 0,
   };
-  const parseStructureElementRecursive = (element: ReactElement) => {
+  const checkValidElementType = (type: any): type is string => {
+    if (elementCounter[type] === undefined) {
+      return false;
+    }
+    return true;
+  };
+  const checkElementIsCountReset = (
+    currentType: string,
+    targetType: string
+  ) => {
+    if (
+      !checkValidElementType(currentType) &&
+      !checkValidElementType(targetType)
+    ) {
+      return false;
+    }
+    switch (currentType) {
+      case "h3":
+        if (targetType === "h2") return true;
+      case "h2":
+        if (targetType === "h1") return true;
+        break;
+    }
+    return false;
+  };
+  const parseStructureElementRecursive = (
+    element: ReactElement,
+    payload?: {
+      isLast: boolean;
+    }
+  ) => {
     if (!element.props) {
       return;
     }
@@ -54,30 +92,65 @@ const parseStructureElement = (element: ReactElement) => {
       element.props.children.forEach(
         (child: string | ReactElement, index: number) => {
           if (isReactElement(child)) {
-            parseStructureElementRecursive(child);
+            const payload = {} as any;
+            if (!!element && !!element.props && element.props.children) {
+              /**
+               * 次のChildが存在し、かつ
+               * そのelement.typeがValidなものであれば本論になる
+               */
+              for (
+                let currentIndex = index + 1;
+                currentIndex < element.props.children.length;
+                currentIndex++
+              ) {
+                const nextElement = element.props.children[currentIndex];
+                if (nextElement) {
+                  if (!nextElement.type || nextElement === "\n") {
+                    continue;
+                  }
+                  if (
+                    checkValidElementType(child.type) &&
+                    checkElementIsCountReset(child.type, nextElement.type)
+                  ) {
+                    payload.isLast = true;
+                    break;
+                  }
+                  payload.isLast = false;
+                  break;
+                }
+                continue;
+              }
+            }
+            parseStructureElementRecursive(child, payload);
             return;
           }
-          if (typeof element.type !== "string") {
+          if (index > 0) {
             return;
           }
-          element.props.children.unshift(
-            <ElementLabel>
-              {structureName[elementCounter[element.type]]}
-            </ElementLabel>
-          );
+          if (
+            typeof element.type !== "string" ||
+            !checkValidElementType(element.type)
+          ) {
+            return;
+          }
+          const handler = (function () {
+            if (payload?.isLast) {
+              return "展開";
+            }
+            return getStructureName(elementCounter[element.type]);
+          })();
+          const currentElement = <ElementLabel>{handler}</ElementLabel>;
+          element.props.children.unshift(currentElement);
           elementCounter[element.type]++;
           switch (element.type) {
             case "h1":
               elementCounter.h2 = 0;
             case "h2":
               elementCounter.h3 = 0;
-            case "h3":
-              elementCounter.p = 0;
 
             default:
               break;
           }
-          console.log(elementCounter);
         }
       );
       return;
@@ -88,7 +161,11 @@ const parseStructureElement = (element: ReactElement) => {
 function markDownToReactElement(markdown: string) {
   const vfile = unified()
     .use(parse)
-    .use(remark2react)
+    .use(remark2react, {
+      remarkReactComponents: {
+        img: RemarkedImg,
+      },
+    })
     .processSync(markdown) as any;
   const element = vfile.result as ReactElement;
   parseStructureElement(element);
