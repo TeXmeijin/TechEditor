@@ -2,16 +2,11 @@ import React from "react";
 
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from "draftail";
 
-const initial = "";
-const onSave = (content) => {
-  console.log("saving", content);
-};
-
-export default function MarkdownEditor(props) {
+export default function MarkdownEditor({markdownText, onChange}) {
   return (
     <DraftailEditor
-      rawContentState={initial || null}
-      onSave={onSave}
+      rawContentState={markdownText || null}
+      onSave={onChange}
       enableHorizontalRule
       enableLineBreak
       showUndoControl
@@ -34,9 +29,7 @@ export default function MarkdownEditor(props) {
         { type: INLINE_STYLE.BOLD },
         { type: INLINE_STYLE.ITALIC },
         { type: INLINE_STYLE.CODE },
-        { type: INLINE_STYLE.MARK },
         { type: INLINE_STYLE.QUOTATION },
-        { type: INLINE_STYLE.STRIKETHROUGH },
       ]}
     />
   );
