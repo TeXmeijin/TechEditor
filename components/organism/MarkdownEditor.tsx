@@ -15,7 +15,7 @@ export default function MarkdownEditor(props) {
       enableHorizontalRule
       enableLineBreak
       showUndoControl
-      autoComplete
+      autoComplete="true"
       showRedoControl
       stripPastedStyles={false}
       maxListNesting={6}
