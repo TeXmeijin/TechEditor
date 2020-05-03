@@ -214,7 +214,7 @@ const Code = styled(BaseParagraph.withComponent("code"))`
   margin: 0 4px;
 `;
 
-export default function MarkdownStructure({ markdown, showParagraph }) {
+export default function MarkdownStructure({ markdown }) {
   const vfile = unified()
     .use(parse)
     .use(remark2react, {

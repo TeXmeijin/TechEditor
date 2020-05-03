@@ -18,7 +18,6 @@ const Content = styled.div`
 
 export default function Home() {
   const [markdownText, setMarkdownText] = useState("");
-  const [showParagraph, setShowParagraph] = useState(false);
 
   return (
     <Layout>
@@ -32,13 +31,13 @@ export default function Home() {
           <WriteContainerItem>
             <MarkdownStructure
               markdown={markdownText}
-              showParagraph={showParagraph}
             ></MarkdownStructure>
           </WriteContainerItem>
           <WriteContainerItem>
             <MarkdownEditor
               markdownText={markdownText}
-              onChange={({ text }) => {
+              onChange={(text) => {
+                console.log(text);
                 setMarkdownText(text);
               }}
             ></MarkdownEditor>
