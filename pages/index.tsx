@@ -3,7 +3,7 @@ import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import MarkdownEditor from "../components/organism/MarkdownEditor";
 import { useState } from "react";
-import MarkdownStructure from "../components/organism/MarkdownStructure";
+import ArticleObjective from "../components/organism/ArticleObjective";
 
 const WriteContainer = styled.div`
   display: flex;
@@ -29,9 +29,7 @@ export default function Home() {
       <Content>
         <WriteContainer>
           <WriteContainerItem>
-            <MarkdownStructure
-              markdown={markdownText}
-            ></MarkdownStructure>
+            <ArticleObjective></ArticleObjective>
           </WriteContainerItem>
           <WriteContainerItem>
             <MarkdownEditor
