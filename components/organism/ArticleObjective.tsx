@@ -14,7 +14,11 @@ const ObjectiveTable = (props) => {
   );
 };
 
-const ObjectiveTableRow = (props) => {
+const ObjectiveTableRow = (props: {
+    heading: string
+    value: string
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}) => {
   return (
     <tr>
       <td>{props.heading}</td>
@@ -54,7 +58,11 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
 `;
 
 const ArticleObjective: React.FC = (props) => {
-  const [mainObjective, setMainObjective] = useState("");
+  const useInput = (initialValue: string) => {
+    const [value, set] = useState(initialValue);
+    return { value, onChange: (e: React.ChangeEvent<HTMLInputElement>) => set(e.target.value) };
+  };
+  const mainObjective = useInput("");
 
   return (
     <>
@@ -62,8 +70,7 @@ const ArticleObjective: React.FC = (props) => {
       <StyledObjectiveTable>
         <ObjectiveTableRow
           heading="何を伝えるのか（主題文）"
-          value={mainObjective}
-          onChange={(event) => setMainObjective(event.target.value)}
+          {...mainObjective}
         ></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
