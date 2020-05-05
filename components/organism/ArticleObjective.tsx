@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 
@@ -15,15 +15,15 @@ const ObjectiveTable = (props) => {
 };
 
 const ObjectiveTableRow = (props: {
-    heading: string
-    value: string
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  heading: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }) => {
   return (
     <tr>
       <td>{props.heading}</td>
       <td>
-        <input type="text" value={props.value} onChange={props.onChange} />
+        <textarea value={props.value} onChange={props.onChange} />
       </td>
     </tr>
   );
@@ -51,7 +51,7 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
     flex: 1;
     width: 100%;
 
-    input {
+    textarea {
       width: 100%;
     }
   }
@@ -60,13 +60,41 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
 const ArticleObjective: React.FC = (props) => {
   const useInput = (initialValue: string) => {
     const [value, set] = useState(initialValue);
-    return { value, onChange: (e: React.ChangeEvent<HTMLInputElement>) => set(e.target.value) };
+    return {
+      value,
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => set(e.target.value),
+      set,
+    };
   };
   const mainObjective = useInput("");
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!loaded) {
+      mainObjective.set(
+        (function () {
+          setLoaded(true);
+          const data = localStorage.getItem("ArticleObjective:data");
+          if (data) {
+            return JSON.parse(data).mainObjective;
+          }
+          return "";
+        })()
+      );
+    }
+    return () => {
+      localStorage.setItem(
+        "ArticleObjective:data",
+        JSON.stringify({ mainObjective: mainObjective.value })
+      );
+    };
+  }, [mainObjective]);
 
   return (
     <>
-      <StyledSubHeading>書く前に産めること</StyledSubHeading>
+      <StyledSubHeading>書く前に埋めること</StyledSubHeading>
       <StyledObjectiveTable>
         <ObjectiveTableRow
           heading="何を伝えるのか（主題文）"
