@@ -58,11 +58,11 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
   }
 `;
 
-type Props = {
+export type ObjectiveProps = {
   mainObjective: inputState;
 };
 
-const ArticleObjective: React.FC<Props> = (props: Props) => {
+const ArticleObjective: React.FC<ObjectiveProps> = (props: ObjectiveProps) => {
   return (
     <>
       <StyledSubHeading>書く前に埋めること</StyledSubHeading>

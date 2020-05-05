@@ -22,6 +22,7 @@ export default function Home() {
   const [markdownText, setMarkdownText] = useState("");
 
   const mainObjective = useInput("", "何を伝えるのか（主題文）");
+
   const [loaded, setLoaded] = useState(false);
 
   const repository = Container.getArticleRepository();
