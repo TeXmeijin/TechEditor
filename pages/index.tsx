@@ -2,56 +2,21 @@ import Head from "next/head";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import MarkdownEditor from "../components/organism/MarkdownEditor";
-import {
-  useState,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 import ArticleObjective from "../components/organism/ArticleObjective";
 import Container from "../lib/container/container";
-import { fromHTML } from '../lib/viewModel/markdownToHTML'
+import { useInput } from "../lib/hooks/inputState";
 
 const WriteContainer = styled.div`
-  display: flex;
   height: 100%;
 `;
+const ArticleConfigration = styled.div``;
 const WriteContainerItem = styled.div`
-  width: 50%;
+  height: 100%;
 `;
 const Content = styled.div`
   height: 100%;
 `;
-
-export type inputState = {
-  value: string;
-  heading: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-  set: Dispatch<SetStateAction<string>>;
-};
-
-const useInput: (initialValue: string, heading: string) => inputState = (
-  initialValue: string,
-  heading: string
-) => {
-  const [value, set] = useState(initialValue);
-  return {
-    value,
-    heading,
-    onChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-      console.log(e.target.value);
-      set(e.target.value);
-    },
-    set,
-  };
-};
-
-import { ContentState, EditorState } from "draft-js";
-import { convertFromHTML } from "draft-convert";
 
 export default function Home() {
   const [markdownText, setMarkdownText] = useState("");
@@ -67,14 +32,7 @@ export default function Home() {
       const article = repository.find();
       if (!article) return;
       mainObjective.set(article.mainObjective);
-
-      const headerOne = '<h1>title</h1>';
-      const blocksFromHTML = convertFromHTML(headerOne);
-      const state = ContentState.createFromBlockArray(
-        blocksFromHTML.contentBlocks,
-        blocksFromHTML.entityMap
-      );
-      setMarkdownText(EditorState.createWithContent(state));
+      setMarkdownText(article.markdownText);
       return;
     }
     const article = { mainObjective: mainObjective.value, markdownText };
@@ -90,9 +48,9 @@ export default function Home() {
 
       <Content>
         <WriteContainer>
-          <WriteContainerItem>
+          <ArticleConfigration>
             <ArticleObjective mainObjective={mainObjective}></ArticleObjective>
-          </WriteContainerItem>
+          </ArticleConfigration>
           <WriteContainerItem>
             <MarkdownEditor
               markdownText={markdownText}

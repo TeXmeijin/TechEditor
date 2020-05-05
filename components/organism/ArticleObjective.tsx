@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { inputState } from "../../pages/index";
+import { inputState } from '../../lib/hooks/inputState'
 
 const SubHeading = (props) => {
   return <h2 className={props.className}>{props.children}</h2>;

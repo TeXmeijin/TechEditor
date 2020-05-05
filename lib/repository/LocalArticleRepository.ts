@@ -1,7 +1,7 @@
 import { IArticleRepository } from "./IArticleRepository";
 import { Article } from "../domain/Article";
 
-const STORAGE = 'ArticleObjective:data:v5'
+const STORAGE = 'ArticleObjective:data:v7'
 export default class LocalArticleRepository implements IArticleRepository {
   create(article: Article): void {
     localStorage.setItem(STORAGE, JSON.stringify(article));
