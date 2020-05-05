@@ -1,20 +1,12 @@
 import React from "react";
-
 import { DraftailEditor, BLOCK_TYPE, INLINE_STYLE } from "draftail";
+import { toHTML } from "../../lib/viewModel/markdownToHTML";
 
-export default function MarkdownEditor({markdownText, onChange}) {
+export default function MarkdownEditor({ markdownText, onChange }) {
+
   return (
     <DraftailEditor
-      rawContentState={markdownText || null}
-      onSave={onChange}
-      enableHorizontalRule
-      enableLineBreak
-      showUndoControl
-      autoComplete="true"
-      showRedoControl
-      stripPastedStyles={false}
-      maxListNesting={6}
-      spellCheck
+      editorState={markdownText}
       blockTypes={[
         { type: BLOCK_TYPE.HEADER_ONE },
         { type: BLOCK_TYPE.HEADER_TWO },

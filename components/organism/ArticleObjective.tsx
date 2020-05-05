@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useState } from "react";
-import { inputState } from '../../pages/index'
+import { inputState } from "../../pages/index";
 
 const SubHeading = (props) => {
   return <h2 className={props.className}>{props.children}</h2>;
@@ -60,17 +59,15 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
 `;
 
 type Props = {
-  mainObjective: inputState
-}
+  mainObjective: inputState;
+};
 
 const ArticleObjective: React.FC<Props> = (props: Props) => {
   return (
     <>
       <StyledSubHeading>書く前に埋めること</StyledSubHeading>
       <StyledObjectiveTable>
-        <ObjectiveTableRow
-          {...props.mainObjective}
-        ></ObjectiveTableRow>
+        <ObjectiveTableRow {...props.mainObjective}></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
   );
