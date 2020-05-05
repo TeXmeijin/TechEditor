@@ -73,6 +73,7 @@ const ArticleObjective: React.FC<ObjectiveProps> = (props: ObjectiveProps) => {
       <StyledObjectiveTable>
         <ObjectiveTableRow {...props.mainObjective}></ObjectiveTableRow>
         <ObjectiveTableRow {...props.target}></ObjectiveTableRow>
+        <ObjectiveTableRow {...props.targetKnows}></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
   );
