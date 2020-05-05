@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import ArticleObjective from "../components/organism/ArticleObjective";
 import Container from "../lib/container/container";
 import { useInput } from "../lib/hooks/inputState";
+import { ArticleState } from "../lib/domain/Article";
 
 const WriteContainer = styled.div`
   height: 100%;
@@ -19,9 +20,7 @@ const Content = styled.div`
 `;
 
 export default function Home() {
-  const [markdownText, setMarkdownText] = useState("");
-
-  const mainObjective = useInput("", "何を伝えるのか（主題文）");
+  const articleState = new ArticleState();
 
   const [loaded, setLoaded] = useState(false);
 
@@ -32,13 +31,12 @@ export default function Home() {
       setLoaded(true);
       const article = repository.find();
       if (!article) return;
-      mainObjective.set(article.mainObjective);
-      setMarkdownText(article.markdownText);
+
+      articleState.update(article);
       return;
     }
-    const article = { mainObjective: mainObjective.value, markdownText };
-    repository.create(article);
-  }, [mainObjective, markdownText]);
+    repository.create(articleState.pickArticleContents());
+  }, articleState.effectTargetValues);
 
   return (
     <Layout>
@@ -50,12 +48,14 @@ export default function Home() {
       <Content>
         <WriteContainer>
           <ArticleConfigration>
-            <ArticleObjective mainObjective={mainObjective}></ArticleObjective>
+            <ArticleObjective
+              {...articleState.objectiveProps}
+            ></ArticleObjective>
           </ArticleConfigration>
           <WriteContainerItem>
             <MarkdownEditor
-              markdownText={markdownText}
-              onChange={setMarkdownText}
+              markdownText={articleState.markdownText.value}
+              onChange={articleState.markdownText.set}
             ></MarkdownEditor>
           </WriteContainerItem>
         </WriteContainer>

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { inputState } from '../../lib/hooks/inputState'
+import { ObjectiveProps } from "../../lib/domain/Article";
 
 const SubHeading = (props) => {
   return <h2 className={props.className}>{props.children}</h2>;
@@ -44,7 +45,13 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
     display: flex;
   }
 
+  tbody {
+    flex-direction: column;
+  }
+
   td:first-child {
+    width: 180px;
+    text-align: right;
   }
 
   td:nth-child(2) {
@@ -58,9 +65,6 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
   }
 `;
 
-export type ObjectiveProps = {
-  mainObjective: inputState;
-};
 
 const ArticleObjective: React.FC<ObjectiveProps> = (props: ObjectiveProps) => {
   return (
@@ -68,6 +72,7 @@ const ArticleObjective: React.FC<ObjectiveProps> = (props: ObjectiveProps) => {
       <StyledSubHeading>書く前に埋めること</StyledSubHeading>
       <StyledObjectiveTable>
         <ObjectiveTableRow {...props.mainObjective}></ObjectiveTableRow>
+        <ObjectiveTableRow {...props.target}></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
   );
