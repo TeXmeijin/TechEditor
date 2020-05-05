@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { inputState } from '../../pages/index'
 
 const SubHeading = (props) => {
   return <h2 className={props.className}>{props.children}</h2>;
@@ -53,52 +54,22 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
 
     textarea {
       width: 100%;
+      max-width: 100%;
     }
   }
 `;
 
-const ArticleObjective: React.FC = (props) => {
-  const useInput = (initialValue: string) => {
-    const [value, set] = useState(initialValue);
-    return {
-      value,
-      onChange: (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => set(e.target.value),
-      set,
-    };
-  };
-  const mainObjective = useInput("");
-  const [loaded, setLoaded] = useState(false);
+type Props = {
+  mainObjective: inputState
+}
 
-  useEffect(() => {
-    if (!loaded) {
-      mainObjective.set(
-        (function () {
-          setLoaded(true);
-          const data = localStorage.getItem("ArticleObjective:data");
-          if (data) {
-            return JSON.parse(data).mainObjective;
-          }
-          return "";
-        })()
-      );
-    }
-    return () => {
-      localStorage.setItem(
-        "ArticleObjective:data",
-        JSON.stringify({ mainObjective: mainObjective.value })
-      );
-    };
-  }, [mainObjective]);
-
+const ArticleObjective: React.FC<Props> = (props: Props) => {
   return (
     <>
       <StyledSubHeading>書く前に埋めること</StyledSubHeading>
       <StyledObjectiveTable>
         <ObjectiveTableRow
-          heading="何を伝えるのか（主題文）"
-          {...mainObjective}
+          {...props.mainObjective}
         ></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
