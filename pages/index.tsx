@@ -10,6 +10,7 @@ import {
   ReactText,
 } from "react";
 import ArticleObjective from "../components/organism/ArticleObjective";
+import Container from "../lib/container/container";
 
 const WriteContainer = styled.div`
   display: flex;
@@ -44,33 +45,30 @@ export default function Home() {
       heading,
       onChange: (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => set(e.target.value),
+      ) => {
+        console.log(e.target.value);
+        set(e.target.value);
+      },
       set,
     };
   };
   const mainObjective = useInput("", "何を伝えるのか（主題文）");
   const [loaded, setLoaded] = useState(false);
 
+  const repository = Container.getArticleRepository();
+
   useEffect(() => {
     if (!loaded) {
-      mainObjective.set(
-        (function () {
-          setLoaded(true);
-          const data = localStorage.getItem("ArticleObjective:data");
-          if (data) {
-            return JSON.parse(data).mainObjective;
-          }
-          return "";
-        })()
-      );
+      setLoaded(true);
+      const article = repository.find();
+      if (!article) return;
+      mainObjective.set(article.mainObjective);
+      setMarkdownText(article.markdownText);
+      return
     }
-    return () => {
-      localStorage.setItem(
-        "ArticleObjective:data",
-        JSON.stringify({ mainObjective: mainObjective.value })
-      );
-    };
-  }, [mainObjective]);
+    const article = { mainObjective: mainObjective.value, markdownText };
+    repository.create(article);
+  }, [mainObjective, markdownText]);
 
   return (
     <Layout>
@@ -87,10 +85,7 @@ export default function Home() {
           <WriteContainerItem>
             <MarkdownEditor
               markdownText={markdownText}
-              onChange={(text) => {
-                console.log(text);
-                setMarkdownText(text);
-              }}
+              onChange={setMarkdownText}
             ></MarkdownEditor>
           </WriteContainerItem>
         </WriteContainer>
