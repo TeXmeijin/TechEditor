@@ -69,11 +69,12 @@ const StyledObjectiveTable = styled(ObjectiveTable)`
 const ArticleObjective: React.FC<ObjectiveProps> = (props: ObjectiveProps) => {
   return (
     <>
-      <StyledSubHeading>書く前に埋めること</StyledSubHeading>
+      <StyledSubHeading>記事を書くときに意識すること</StyledSubHeading>
       <StyledObjectiveTable>
         <ObjectiveTableRow {...props.mainObjective}></ObjectiveTableRow>
         <ObjectiveTableRow {...props.target}></ObjectiveTableRow>
         <ObjectiveTableRow {...props.targetKnows}></ObjectiveTableRow>
+        <ObjectiveTableRow {...props.youWantToDoForTarget}></ObjectiveTableRow>
       </StyledObjectiveTable>
     </>
   );

@@ -4,6 +4,7 @@ export type ObjectiveProps = {
   mainObjective: inputState;
   target: inputState;
   targetKnows: inputState;
+  youWantToDoForTarget: inputState;
 };
 
 export type Article = {
@@ -21,11 +22,15 @@ export class ArticleState {
   effectTargetValues: any[];
 
   constructor() {
-    const mainObjective = useInput("", "何を伝えるのか（主題文）");
+    const mainObjective = useInput("", "本記事の主題文");
     const target = useInput("", "対象読者");
     const targetKnows = useInput(
       "",
-      "対象読者は主題についてどこまで知っているか"
+      "対象読者が主題についてどこまで知っている想定か"
+    );
+    const youWantToDoForTarget = useInput(
+      "",
+      "読み手に本記事から得た知識でなにをしてほしいのか"
     );
 
     const [markdownText, setMarkdownText] = useState("");
@@ -34,6 +39,7 @@ export class ArticleState {
       mainObjective,
       target,
       targetKnows,
+      youWantToDoForTarget,
     };
 
     this.markdownText = {
@@ -41,7 +47,13 @@ export class ArticleState {
       set: setMarkdownText,
     };
 
-    this.effectTargetValues = [mainObjective, target, markdownText];
+    this.effectTargetValues = [
+      mainObjective,
+      target,
+      targetKnows,
+      youWantToDoForTarget,
+      markdownText,
+    ];
   }
 
   update(article: Article) {
@@ -59,6 +71,7 @@ export class ArticleState {
       mainObjective: this.objectiveProps.mainObjective.value,
       target: this.objectiveProps.target.value,
       targetKnows: this.objectiveProps.targetKnows.value,
+      youWantToDoForTarget: this.objectiveProps.youWantToDoForTarget.value,
       markdownText: this.markdownText.value,
     };
   }
