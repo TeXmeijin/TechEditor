@@ -5,14 +5,31 @@ import MarkdownEditor from "../components/organism/MarkdownEditor";
 import { useState, useEffect } from "react";
 import ArticleObjective from "../components/organism/ArticleObjective";
 import Container from "../lib/container/container";
-import { useInput } from "../lib/hooks/inputState";
 import { ArticleState } from "../lib/domain/Article";
+import StyledSubHeading from "../components/atoms/SubHeading";
+import { useInput, useCheckbox } from "../lib/hooks/inputState";
 
 const WriteContainer = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
-const ArticleConfigration = styled.div``;
-const WriteContainerItem = styled.div`
+const ArticleConfigration = styled.div`
+  padding: 32px;
+`;
+const EditorArea = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+  padding: 0 32px;
+`;
+const PreviewArea = styled.div`
+  flex: 1;
+`;
+const EditorHeading = styled.div``;
+const EditorContainer = styled.div`
+  margin-top: 16px;
+  flex: 1;
+  display: flex;
   height: 100%;
 `;
 const Content = styled.div`
@@ -23,6 +40,7 @@ export default function Home() {
   const articleState = new ArticleState();
 
   const [loaded, setLoaded] = useState(false);
+  const isRefineMode = useCheckbox(false, "推敲モードにする");
 
   const repository = Container.getArticleRepository();
 
@@ -35,7 +53,12 @@ export default function Home() {
       articleState.update(article);
       return;
     }
-    repository.create(articleState.pickArticleContents());
+    const article = articleState.pickArticleContents();
+    if (!article.id) {
+      repository.create(article);
+      return;
+    }
+    repository.update(article);
   }, articleState.effectTargetValues);
 
   return (
@@ -48,16 +71,40 @@ export default function Home() {
       <Content>
         <WriteContainer>
           <ArticleConfigration>
-            <ArticleObjective
-              {...articleState.objectiveProps}
+            <ArticleObjective<typeof articleState.headings>
+              heading="タイトル"
+              inputList={articleState.headings}
+            ></ArticleObjective>
+            <ArticleObjective<typeof articleState.objectiveProps>
+              heading="本記事の目的"
+              inputList={articleState.objectiveProps}
             ></ArticleObjective>
           </ArticleConfigration>
-          <WriteContainerItem>
-            <MarkdownEditor
-              markdownText={articleState.markdownText.value}
-              onChange={articleState.markdownText.set}
-            ></MarkdownEditor>
-          </WriteContainerItem>
+          <EditorArea>
+            <EditorHeading>
+              <StyledSubHeading>記事エディタ</StyledSubHeading>
+            </EditorHeading>
+            <input
+              checked={isRefineMode.value}
+              onChange={isRefineMode.onChange}
+              type="checkbox"
+              name="refineMode"
+              id="refineMode"
+            />
+            <label htmlFor="refineMode">推敲モード</label>
+            <EditorContainer>
+              <MarkdownEditor
+                markdownText={articleState.markdownText.value}
+                onChange={articleState.markdownText.set}
+                mode={{ refine: isRefineMode.value }}
+              ></MarkdownEditor>
+              {isRefineMode.value ? (
+                <PreviewArea>{articleState.markdownText.value}</PreviewArea>
+              ) : (
+                ""
+              )}
+            </EditorContainer>
+          </EditorArea>
         </WriteContainer>
       </Content>
     </Layout>

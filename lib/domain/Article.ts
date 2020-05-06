@@ -3,18 +3,26 @@ import { useState, Dispatch, SetStateAction } from "react";
 export type ObjectiveProps = {
   mainObjective: inputState;
   target: inputState;
-  targetKnows: inputState;
   youWantToDoForTarget: inputState;
 };
 
-export type Article = {
+export type Headings = {
+  title: inputState;
+};
+
+export type ArticleDTO = {
+  id?: string
   markdownText: string;
 } & {
   [key in keyof ObjectiveProps]: string;
+} & {
+  [key in keyof Headings]: string;
 };
 
 export class ArticleState {
+  id?: string
   objectiveProps: ObjectiveProps;
+  headings: Headings;
   markdownText: {
     value: string;
     set: Dispatch<SetStateAction<string>>;
@@ -22,23 +30,26 @@ export class ArticleState {
   effectTargetValues: any[];
 
   constructor() {
-    const mainObjective = useInput("", "本記事の主題文");
-    const target = useInput("", "対象読者");
-    const targetKnows = useInput(
+    const title = useInput("", "記事のタイトル(仮)");
+    const mainObjective = useInput("", "本記事の主題");
+    const target = useInput(
       "",
-      "対象読者が主題についてどこまで知っている想定か"
+      "対象読者の知識レベル(どこまで主題について知っているか)"
     );
     const youWantToDoForTarget = useInput(
       "",
-      "読み手に本記事から得た知識でなにをしてほしいのか"
+      "読者に本記事から得た知識で成し遂げてほしいこと"
     );
 
     const [markdownText, setMarkdownText] = useState("");
 
+    this.headings = {
+      title,
+    };
+
     this.objectiveProps = {
       mainObjective,
       target,
-      targetKnows,
       youWantToDoForTarget,
     };
 
@@ -50,27 +61,34 @@ export class ArticleState {
     this.effectTargetValues = [
       mainObjective,
       target,
-      targetKnows,
       youWantToDoForTarget,
       markdownText,
     ];
   }
 
-  update(article: Article) {
+  update(article: ArticleDTO) {
     (Object.keys(this.objectiveProps) as (keyof ObjectiveProps)[]).forEach(
       (key) => {
         this.objectiveProps[key].set(article[key]);
       }
     );
+    (Object.keys(this.headings) as (keyof Headings)[]).forEach(
+      (key) => {
+        this.headings[key].set(article[key]);
+      }
+    );
+
+    this.id = article.id
 
     this.markdownText.set(article.markdownText);
   }
 
-  pickArticleContents(): Article {
+  pickArticleContents(): ArticleDTO {
     return {
+      id: this.id,
+      title: this.headings.title.value,
       mainObjective: this.objectiveProps.mainObjective.value,
       target: this.objectiveProps.target.value,
-      targetKnows: this.objectiveProps.targetKnows.value,
       youWantToDoForTarget: this.objectiveProps.youWantToDoForTarget.value,
       markdownText: this.markdownText.value,
     };
