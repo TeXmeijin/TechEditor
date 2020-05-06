@@ -30,7 +30,7 @@ export class ArticleState {
   effectTargetValues: any[];
 
   constructor() {
-    const title = useInput("", "記事のタイトル(仮)");
+    const title = useInput("", "記事のタイトル");
     const mainObjective = useInput("", "本記事の主題");
     const target = useInput(
       "",

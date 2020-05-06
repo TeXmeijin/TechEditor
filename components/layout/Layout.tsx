@@ -38,11 +38,11 @@ function Layout({ children }) {
   return (
     <Main>
       <Content>{children}</Content>
-      <Footer>
+      <StyledFooter>
         <a href="https://meijin.me" target="_blank" rel="noopener noreferrer">
           Powered by Meijin
         </a>
-      </Footer>
+      </StyledFooter>
 
       <style jsx global>{`
         html,

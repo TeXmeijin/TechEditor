@@ -7,65 +7,22 @@ import ArticleObjective from "../components/organism/ArticleObjective";
 import Container from "../lib/container/container";
 import { ArticleState } from "../lib/domain/Article";
 import StyledSubHeading from "../components/atoms/SubHeading";
-import { useInput, useCheckbox } from "../lib/hooks/inputState";
+import { useCheckbox } from "../lib/hooks/inputState";
+import { StyledRefineTarget } from "../components/organism/RefineTarget";
+import { CheckBoxWithLabel } from "../components/molecules/CheckBoxWithLabel";
 
 const WriteContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 `;
 const ArticleConfigration = styled.div`
   padding: 32px;
 `;
 const EditorArea = styled.div`
   height: 100%;
-  overflow-y: scroll;
   padding: 0 32px;
-`;
-const PreviewArea = styled.div`
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: -internal-light-dark-color(black, white);
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: start;
-  -webkit-appearance: textarea;
-  background-color: -internal-light-dark-color(white, black);
-  -webkit-rtl-ordering: logical;
-  flex-direction: column;
-  resize: auto;
-  cursor: text;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  margin: 0em;
-  font: 400 11px system-ui;
-  border-width: 1px;
-  border-style: solid;
-  border-color: initial;
-  border-image: initial;
-  padding: 2px;
-  padding: 15px;
-  padding-top: 10px;
-  margin-top: 40px;
-  font-size: 1rem;
-  flex: 1;
-  white-space: pre-wrap;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  border: none;
-  resize: none;
-  outline: none;
-  min-height: 0;
-  background: #fff;
-  color: #333;
-  line-height: 1.7;
 `;
 const EditorHeading = styled.div``;
 const EditorContainer = styled.div`
@@ -76,6 +33,9 @@ const EditorContainer = styled.div`
 `;
 const Content = styled.div`
   height: 100%;
+`;
+const CheckBoxContainer = styled.div`
+  margin-top: 16px;
 `;
 
 export default function Home() {
@@ -132,14 +92,13 @@ export default function Home() {
             <EditorHeading>
               <StyledSubHeading>記事エディタ</StyledSubHeading>
             </EditorHeading>
-            <input
-              checked={isRefineMode.value}
-              onChange={isRefineMode.onChange}
-              type="checkbox"
-              name="refineMode"
-              id="refineMode"
-            />
-            <label htmlFor="refineMode">推敲モード</label>
+            <CheckBoxContainer>
+              <CheckBoxWithLabel
+                {...isRefineMode}
+                label="推敲する"
+                name="refineMode"
+              ></CheckBoxWithLabel>
+            </CheckBoxContainer>
             <EditorContainer
               className={isRefineMode.value ? "refining-editor" : null}
             >
@@ -149,7 +108,7 @@ export default function Home() {
                 mode={{ refine: isRefineMode.value }}
               ></MarkdownEditor>
               {isRefineMode.value ? (
-                <PreviewArea>{markdownTextForRefine}</PreviewArea>
+                <StyledRefineTarget>{markdownTextForRefine}</StyledRefineTarget>
               ) : (
                 ""
               )}
