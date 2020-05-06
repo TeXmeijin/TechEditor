@@ -34,14 +34,38 @@ const EditorContainer = styled.div`
 const Content = styled.div`
   height: 100%;
 `;
-const CheckBoxContainer = styled.div`
+const RefineContainer = styled.div`
   margin-top: 16px;
+`;
+
+const CommitButton = (props) => {
+  return (
+    <button className={props.className} onClick={props.onClick}>
+      {props.label}
+    </button>
+  );
+};
+
+const StyledCommitButton = styled(CommitButton)`
+  padding: 4px 16px;
+  border: 2px solid var(--primaryColor);
+  color: var(--primaryColor);
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+`;
+
+const StyledCommitButtonContainer = styled(StyledCommitButton)`
+  margin-left: 16px;
 `;
 
 export default function Home() {
   const articleState = new ArticleState();
 
   const [markdownTextForRefine, setMarkdownTextForRefine] = useState("");
+  const commitMarkdownText = () => {
+    setMarkdownTextForRefine(articleState.markdownText.value);
+  };
 
   const [loaded, setLoaded] = useState(false);
   const isRefineMode = useCheckbox(false, "推敲モードにする");
@@ -66,7 +90,9 @@ export default function Home() {
   }, articleState.effectTargetValues);
 
   useEffect(() => {
-    setMarkdownTextForRefine(articleState.markdownText.value);
+    if (!markdownTextForRefine) {
+      commitMarkdownText();
+    }
   }, [isRefineMode.value]);
 
   return (
@@ -97,13 +123,20 @@ export default function Home() {
             <EditorHeading>
               <StyledSubHeading>記事エディタ</StyledSubHeading>
             </EditorHeading>
-            <CheckBoxContainer>
+            <RefineContainer>
               <CheckBoxWithLabel
                 {...isRefineMode}
                 label="推敲する"
                 name="refineMode"
               ></CheckBoxWithLabel>
-            </CheckBoxContainer>
+              <StyledCommitButtonContainer
+                label="コミットする"
+                onClick={() => {
+                  commitMarkdownText();
+                  repository.create(articleState.pickArticleContents());
+                }}
+              ></StyledCommitButtonContainer>
+            </RefineContainer>
             <EditorContainer
               className={isRefineMode.value ? "refining-editor" : null}
             >
@@ -117,9 +150,7 @@ export default function Home() {
                   current={markdownTextForRefine}
                   refined={articleState.markdownText.value}
                 ></StyledRefineTarget>
-              ) : (
-                ""
-              )}
+              ) : null}
             </EditorContainer>
           </EditorArea>
         </WriteContainer>

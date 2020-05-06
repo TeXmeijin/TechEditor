@@ -8,7 +8,7 @@ const RefineTarget = (props: {
   current: string;
   refined: string;
 }) => {
-  const diff = Diff.createPatch("編集中の記事", props.current, props.refined);
+  const diff = Diff.createPatch("commitとの差分", props.current, props.refined);
   console.log({ diff });
   const __html = diff2Html.html(diff2Html.parse(diff), { drawFileList: false });
 
@@ -20,4 +20,5 @@ const RefineTarget = (props: {
 export const StyledRefineTarget = styled(RefineTarget)`
   flex: 1;
   line-height: 1.7;
+  max-width: 50%;
 `;

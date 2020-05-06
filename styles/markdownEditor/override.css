@@ -10,6 +10,10 @@
   position: relative;
 }
 
+.d2h-code-line-ctn, .d2h-code-line-prefix {
+  white-space: pre-wrap;
+}
+
 .rc-md-editor .editor-container .sec-md .input {
   font-size: 1rem;
 }
