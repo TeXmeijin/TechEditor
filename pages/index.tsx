@@ -23,7 +23,49 @@ const EditorArea = styled.div`
   padding: 0 32px;
 `;
 const PreviewArea = styled.div`
+  -webkit-writing-mode: horizontal-tb !important;
+  text-rendering: auto;
+  color: -internal-light-dark-color(black, white);
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+  -webkit-appearance: textarea;
+  background-color: -internal-light-dark-color(white, black);
+  -webkit-rtl-ordering: logical;
+  flex-direction: column;
+  resize: auto;
+  cursor: text;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  margin: 0em;
+  font: 400 11px system-ui;
+  border-width: 1px;
+  border-style: solid;
+  border-color: initial;
+  border-image: initial;
+  padding: 2px;
+  padding: 15px;
+  padding-top: 10px;
+  margin-top: 40px;
+  font-size: 1rem;
   flex: 1;
+  white-space: pre-wrap;
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  border: none;
+  resize: none;
+  outline: none;
+  min-height: 0;
+  background: #fff;
+  color: #333;
+  line-height: 1.7;
 `;
 const EditorHeading = styled.div``;
 const EditorContainer = styled.div`
@@ -38,6 +80,8 @@ const Content = styled.div`
 
 export default function Home() {
   const articleState = new ArticleState();
+
+  const [markdownTextForRefine, setMarkdownTextForRefine] = useState("");
 
   const [loaded, setLoaded] = useState(false);
   const isRefineMode = useCheckbox(false, "推敲モードにする");
@@ -60,6 +104,10 @@ export default function Home() {
     }
     repository.update(article);
   }, articleState.effectTargetValues);
+
+  useEffect(() => {
+    setMarkdownTextForRefine(articleState.markdownText.value);
+  }, [isRefineMode.value]);
 
   return (
     <Layout>
@@ -92,14 +140,16 @@ export default function Home() {
               id="refineMode"
             />
             <label htmlFor="refineMode">推敲モード</label>
-            <EditorContainer>
+            <EditorContainer
+              className={isRefineMode.value ? "refining-editor" : null}
+            >
               <MarkdownEditor
                 markdownText={articleState.markdownText.value}
                 onChange={articleState.markdownText.set}
                 mode={{ refine: isRefineMode.value }}
               ></MarkdownEditor>
               {isRefineMode.value ? (
-                <PreviewArea>{articleState.markdownText.value}</PreviewArea>
+                <PreviewArea>{markdownTextForRefine}</PreviewArea>
               ) : (
                 ""
               )}

@@ -25,6 +25,13 @@ type Props = {
   mode: Mode;
 };
 
+
+let Editor = null
+
+const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
+  ssr: false,
+}) as ComponentType<any>;
+
 export default function (props: Props) {
   const view = {
     menu: true,
@@ -32,15 +39,19 @@ export default function (props: Props) {
     html: !props.mode.refine,
   };
 
-  const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
-    ssr: false,
-  });
+  const canView = {
+    menu: true,
+    md: false,
+    html: false,
+    fullScreen: true,
+    hideMenu: true,
+  };
 
   return (
     <MdEditor
       value={props.markdownText}
       style={{ flex: 1 }}
-      config={{ view }}
+      config={{ view, canView }}
       // onImageUpload={onImageUpload}
       renderHTML={(text) => mdParser.render(text)}
       onChange={({ text }) => props.onChange(text)}

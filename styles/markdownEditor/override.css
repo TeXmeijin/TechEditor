@@ -1,7 +1,25 @@
 .rc-md-editor .editor-container .sec-md .input {
-    font-size: 1rem;
+  font-size: 1rem;
+}
+
+.rc-md-editor {
+  width: 50%;
+}
+
+.rc-md-navigation {
+  overflow-x: scroll;
 }
 
 .sec-html {
-    background-color: #faf7d2;
+  background-color: #faf7d2;
+}
+
+.rc-md-navigation .button-wrap,
+.rc-md-navigation .navigation-nav {
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+}
+
+.refining-editor .sec-html {
+    display: none;
 }
