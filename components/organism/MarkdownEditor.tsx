@@ -33,12 +33,6 @@ const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
 }) as ComponentType<any>;
 
 export default function (props: Props) {
-  const view = {
-    menu: true,
-    md: true,
-    html: !props.mode.refine,
-  };
-
   const canView = {
     menu: true,
     md: false,
@@ -51,7 +45,7 @@ export default function (props: Props) {
     <MdEditor
       value={props.markdownText}
       style={{ flex: 1 }}
-      config={{ view, canView }}
+      config={{ canView }}
       // onImageUpload={onImageUpload}
       renderHTML={(text) => mdParser.render(text)}
       onChange={({ text }) => props.onChange(text)}

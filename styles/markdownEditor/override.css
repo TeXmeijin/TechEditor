@@ -1,3 +1,15 @@
+.d2h-file-header {
+  height: 38px;
+}
+
+.d2h-file-wrapper {
+  border-radius: 0;
+}
+
+.d2h-diff-table {
+  position: relative;
+}
+
 .rc-md-editor .editor-container .sec-md .input {
   font-size: 1rem;
 }

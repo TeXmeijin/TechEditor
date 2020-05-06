@@ -74,6 +74,11 @@ export default function Home() {
       <Head>
         <title>Tech Editor</title>
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css"
+        />
       </Head>
 
       <Content>
@@ -108,7 +113,10 @@ export default function Home() {
                 mode={{ refine: isRefineMode.value }}
               ></MarkdownEditor>
               {isRefineMode.value ? (
-                <StyledRefineTarget>{markdownTextForRefine}</StyledRefineTarget>
+                <StyledRefineTarget
+                  current={markdownTextForRefine}
+                  refined={articleState.markdownText.value}
+                ></StyledRefineTarget>
               ) : (
                 ""
               )}
