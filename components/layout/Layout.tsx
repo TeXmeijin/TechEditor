@@ -10,6 +10,9 @@ const Content = styled.div`
   flex: 1;
 
   --primaryColor: #078749;
+  --gray: #777;
+  --grayLight1: #999;
+  --grayLight2: #aaa;
   --grayLight3: #ccc;
   --grayLight4: #ddd;
   --grayLight5: #eee;

@@ -11,16 +11,20 @@ export type Headings = {
 };
 
 export type ArticleDTO = {
-  id?: string
+  id?: string;
   markdownText: string;
 } & {
   [key in keyof ObjectiveProps]: string;
-} & {
-  [key in keyof Headings]: string;
-};
+} &
+  {
+    [key in keyof Headings]: string;
+  };
 
 export class ArticleState {
-  id?: string
+  id: {
+    value: string | null;
+    set: Dispatch<SetStateAction<string>>;
+  };
   objectiveProps: ObjectiveProps;
   headings: Headings;
   markdownText: {
@@ -30,6 +34,7 @@ export class ArticleState {
   effectTargetValues: any[];
 
   constructor() {
+    const [id, setId] = useState(null);
     const title = useInput("", "記事のタイトル");
     const mainObjective = useInput("", "本記事の主題");
     const target = useInput(
@@ -59,11 +64,20 @@ export class ArticleState {
     };
 
     this.effectTargetValues = [
-      mainObjective,
-      target,
-      youWantToDoForTarget,
+      mainObjective.value,
+      target.value,
+      youWantToDoForTarget.value,
       markdownText,
     ];
+
+    this.id = {
+      value: id,
+      set: setId,
+    };
+  }
+
+  setId(id: string) {
+    this.id.set(id);
   }
 
   update(article: ArticleDTO) {
@@ -72,20 +86,19 @@ export class ArticleState {
         this.objectiveProps[key].set(article[key]);
       }
     );
-    (Object.keys(this.headings) as (keyof Headings)[]).forEach(
-      (key) => {
-        this.headings[key].set(article[key]);
-      }
-    );
+    (Object.keys(this.headings) as (keyof Headings)[]).forEach((key) => {
+      this.headings[key].set(article[key]);
+    });
 
-    this.id = article.id
+    this.id.set(article.id);
 
     this.markdownText.set(article.markdownText);
   }
 
   pickArticleContents(): ArticleDTO {
+    console.log(this.id.value)
     return {
-      id: this.id,
+      id: this.id.value,
       title: this.headings.title.value,
       mainObjective: this.objectiveProps.mainObjective.value,
       target: this.objectiveProps.target.value,

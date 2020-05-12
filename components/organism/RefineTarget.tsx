@@ -1,51 +1,24 @@
 import styled from "styled-components";
+// const gitDiff = require('git-diff')
+import * as diff2Html from "diff2html";
+import * as Diff from "diff";
 
-const RefineTarget = (props) => {
-  return <div className={props.className}>{props.children}</div>;
+const RefineTarget = (props: {
+  className?: string;
+  current: string;
+  refined: string;
+}) => {
+  const diff = Diff.createPatch("commitとの差分", props.current, props.refined);
+  console.log({ diff });
+  const __html = diff2Html.html(diff2Html.parse(diff), { drawFileList: false });
+
+  return (
+    <div className={props.className} dangerouslySetInnerHTML={{ __html }}></div>
+  );
 };
 
 export const StyledRefineTarget = styled(RefineTarget)`
-  -webkit-writing-mode: horizontal-tb !important;
-  text-rendering: auto;
-  color: -internal-light-dark-color(black, white);
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-transform: none;
-  text-indent: 0px;
-  text-shadow: none;
-  display: inline-block;
-  text-align: start;
-  -webkit-appearance: textarea;
-  background-color: -internal-light-dark-color(white, black);
-  -webkit-rtl-ordering: logical;
-  flex-direction: column;
-  resize: auto;
-  cursor: text;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  margin: 0em;
-  font: 400 11px system-ui;
-  border-width: 1px;
-  border-style: solid;
-  border-color: initial;
-  border-image: initial;
-  padding: 2px;
-  padding: 15px;
-  padding-top: 10px;
-  margin-top: 40px;
-  font-size: 1rem;
   flex: 1;
-  white-space: pre-wrap;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-  border: none;
-  resize: none;
-  outline: none;
-  min-height: 0;
-  background: #fff;
-  color: #333;
   line-height: 1.7;
+  max-width: 50%;
 `;
