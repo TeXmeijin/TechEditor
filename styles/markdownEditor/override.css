@@ -10,7 +10,8 @@
   position: relative;
 }
 
-.d2h-code-line-ctn, .d2h-code-line-prefix {
+.d2h-code-line-ctn,
+.d2h-code-line-prefix {
   white-space: pre-wrap;
 }
 
@@ -30,6 +31,12 @@
   background-color: #faf7d2;
 }
 
+.hide-paragraph-mode .sec-html p,
+.hide-paragraph-mode .sec-html ul,
+.hide-paragraph-mode .sec-html pre {
+  display: none;
+}
+
 .rc-md-navigation .button-wrap,
 .rc-md-navigation .navigation-nav {
   flex-wrap: nowrap;
@@ -37,5 +44,5 @@
 }
 
 .refining-editor .sec-html {
-    display: none;
+  display: none;
 }

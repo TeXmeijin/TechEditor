@@ -47,6 +47,11 @@ const Content = styled.div`
 `;
 const RefineContainer = styled.div`
   margin-top: 16px;
+  display: flex;
+  align-items: center;
+`;
+const RefineContainerItem = styled.div`
+  flex: 1;
 `;
 
 const StyledCommitButtonContainer = styled(StyledCommitButton)`
@@ -103,6 +108,7 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [listArticles, setListArticles] = useState<ArticleDTO[]>([]);
   const isRefineMode = useCheckbox(false, "推敲モードにする");
+  const isOnlyHeadingMode = useCheckbox(false, "見出しのみをプレビューする");
 
   const repository = Container.getArticleRepository();
 
@@ -129,7 +135,10 @@ export default function Home() {
     <Layout>
       <Head>
         <title>Tech Editor | 技術記事執筆に特化したブラウザエディタ</title>
-        <meta property="og:description" content="技術記事の執筆に特化したエディタです。ブラウザ上で動きます。対象読者や主題文を最初に整備した上で書くことができます。差分をGitのように管理でき、推敲もはかどります。" />
+        <meta
+          property="og:description"
+          content="技術記事の執筆に特化したエディタです。ブラウザ上で動きます。対象読者や主題文を最初に整備した上で書くことができます。差分をGitのように管理でき、推敲もはかどります。"
+        />
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
@@ -159,7 +168,7 @@ export default function Home() {
                     title={article.title}
                     id={article.id}
                     onClick={() => {
-                      articleState.update(article)
+                      articleState.update(article);
                     }}
                     onDeleteClick={() => {
                       repository.delete(article.id);
@@ -175,21 +184,30 @@ export default function Home() {
               <StyledSubHeading>記事エディタ</StyledSubHeading>
             </EditorHeading>
             <RefineContainer>
-              <CheckBoxWithLabel
-                {...isRefineMode}
-                label="コミット差分を見る"
-                name="refineMode"
-              ></CheckBoxWithLabel>
-              <StyledCommitButtonContainer
-                label="コミットする"
-                onClick={() => {
-                  commitMarkdownText();
-                  repository.create(articleState.pickArticleContents());
-                }}
-              ></StyledCommitButtonContainer>
+              <RefineContainerItem>
+                <CheckBoxWithLabel
+                  {...isRefineMode}
+                  name="refineMode"
+                ></CheckBoxWithLabel>
+                <StyledCommitButtonContainer
+                  label="コミットする"
+                  onClick={() => {
+                    commitMarkdownText();
+                    repository.create(articleState.pickArticleContents());
+                  }}
+                ></StyledCommitButtonContainer>
+              </RefineContainerItem>
+              <RefineContainerItem>
+                <CheckBoxWithLabel
+                  {...isOnlyHeadingMode}
+                  name="isOnlyHeadingMode"
+                ></CheckBoxWithLabel>
+              </RefineContainerItem>
             </RefineContainer>
             <EditorContainer
-              className={isRefineMode.value ? "refining-editor" : null}
+              className={`${isRefineMode.value ? "refining-editor" : null} ${
+                isOnlyHeadingMode.value ? "hide-paragraph-mode" : null
+              }`}
             >
               <MarkdownEditor
                 markdownText={articleState.markdownText.value}

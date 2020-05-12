@@ -15,7 +15,7 @@ export type inputState = {
 };
 export type checkboxState = {
   value: boolean;
-  heading: string;
+  label: string;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
@@ -46,7 +46,7 @@ export const useCheckbox: (initialValue: boolean, heading: string) => checkboxSt
   const [value, set] = useState(initialValue);
   return {
     value,
-    heading,
+    label: heading,
     onChange: (
       e: React.ChangeEvent<HTMLInputElement>
     ) => {
