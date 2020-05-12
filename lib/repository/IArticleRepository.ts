@@ -5,5 +5,6 @@ export interface IArticleRepository {
   update(article: ArticleDTO): void;
   find(id?: string, user?: User): ArticleDTO | null;
   listAll(user?: User): ArticleDTO[];
+  delete(id: string): void;
   nextIdentity(): string;
 }

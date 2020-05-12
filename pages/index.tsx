@@ -158,10 +158,11 @@ export default function Home() {
                     title={article.title}
                     id={article.id}
                     onClick={() => {
-                      console.log(article.id);
+                      articleState.update(article)
                     }}
                     onDeleteClick={() => {
-                      console.log(article.id);
+                      repository.delete(article.id);
+                      setListArticles(repository.listAll());
                     }}
                   ></StyledHistoryCard>
                 );
