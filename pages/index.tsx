@@ -128,7 +128,8 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Tech Editor</title>
+        <title>Tech Editor | 技術記事執筆に特化したブラウザエディタ</title>
+        <meta property="og:description" content="技術記事の執筆に特化したエディタです。ブラウザ上で動きます。対象読者や主題文を最初に整備した上で書くことができます。差分をGitのように管理でき、推敲もはかどります。" />
         <link rel="icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
