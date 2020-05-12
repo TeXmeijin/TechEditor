@@ -206,7 +206,7 @@ export default function Home() {
             </RefineContainer>
             <EditorContainer
               className={`${isRefineMode.value ? "refining-editor" : null} ${
-                isOnlyHeadingMode.value ? "hide-paragraph-mode" : null
+                isOnlyHeadingMode.value ? "is-only-heading-mode" : null
               }`}
             >
               <MarkdownEditor

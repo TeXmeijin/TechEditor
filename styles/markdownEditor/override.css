@@ -31,10 +31,70 @@
   background-color: #faf7d2;
 }
 
-.hide-paragraph-mode .sec-html p,
-.hide-paragraph-mode .sec-html ul,
-.hide-paragraph-mode .sec-html pre {
+.is-only-heading-mode .sec-html p,
+.is-only-heading-mode .sec-html ul,
+.is-only-heading-mode .sec-html pre,
+.is-only-heading-mode .sec-html hr {
   display: none;
+}
+
+.is-only-heading-mode .sec-html h1,
+.is-only-heading-mode .sec-html h2,
+.is-only-heading-mode .sec-html h3,
+.is-only-heading-mode .sec-html h4 {
+  font-weight: normal;
+  font-size: 1rem;
+  margin-top: 0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+.is-only-heading-mode .sec-html {
+  counter-reset: h1;
+}
+.is-only-heading-mode .sec-html h1 {
+  counter-reset: h2;
+  counter: 1;
+}
+.is-only-heading-mode .sec-html h2 {
+  counter-reset: h3;
+  counter: 1;
+  margin-left: 8px;
+}
+.is-only-heading-mode .sec-html h3 {
+  counter-reset: h4;
+  counter: 1;
+  margin-left: 16px;
+}
+.is-only-heading-mode .sec-html h4 {
+  margin-left: 24px;
+}
+.is-only-heading-mode .sec-html h1::before,
+.is-only-heading-mode .sec-html h2::before,
+.is-only-heading-mode .sec-html h3::before,
+.is-only-heading-mode .sec-html h4::before {
+  margin-right: 8px;
+  font-weight: bold;
+  font-size: 1.15rem;
+  display: block;
+  min-width: 48px;
+  text-align: left;
+}
+.is-only-heading-mode .sec-html h1::before {
+  counter-increment: h1;
+  content: counter(h1);
+}
+.is-only-heading-mode .sec-html h2::before {
+  counter-increment: h2;
+  content: counter(h1) '.' counter(h2);
+}
+.is-only-heading-mode .sec-html h3::before {
+  counter-increment: h3;
+  content: counter(h1) '.' counter(h2) '.' counter(h3);
+}
+.is-only-heading-mode .sec-html h4::before {
+  counter-increment: h4;
+  content: counter(h1) '.' counter(h2) '.' counter(h3) '.' counter(h4);
 }
 
 .rc-md-navigation .button-wrap,
